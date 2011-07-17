@@ -1,16 +1,12 @@
-gem 'rack-rewrite', '~> 1.0.0'
-require 'rubygems'
 require 'rack'
-require 'rack/rewrite'
-require 'thin'
+require 'rack/contrib/try_static'
 
-#use Rack::Static, :urls => ["/css", "/images", "/index.html", "/contact.html", "/home.html", "/password.html"], :root => "public"
-use Rack::Static, :urls => ["/css", "/images", "/index.html"], :root => "public"
+use Rack::TryStatic, 
+    :root => "public",  # static files root dir
+    :urls => %w[/],     # match all requests 
+    :try => ['.html', 'index.html', '/index.html'] # try these postfixes sequentially
+# otherwise 404 NotFound
+run lambda { [404, {'Content-Type' => 'text/html'}, ['whoops! Not Found']]}
 
-use Rack::Rewrite do
-rewrite '/', '/index.html'
-end
-
-run Rack::Directory.new('public')
-
+# vi: ft=ruby
 
