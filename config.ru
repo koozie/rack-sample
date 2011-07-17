@@ -1,3 +1,4 @@
+gem 'rack-rewrite', '~> 1.0.0'
 require 'rubygems'
 require 'rack'
 require 'rack/rewrite'
